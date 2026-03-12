@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSSIQ - أعمالي وتراخيصي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--gold:#f5a623;--gl:#ffd166;--deep:#050d1a;--mid:#0a1628;--card:#0d1f3c;--mut:#8899bb;--grn:#00e676;--red:#ff4444;}
+body{font-family:'Cairo',sans-serif;background:var(--deep);color:#fff;min-height:100vh;}
+.bg{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 30%,rgba(21,101,192,.2),transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(245,166,35,.1),transparent 50%),linear-gradient(135deg,#050d1a,#0a1628);z-index:0;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(5,13,26,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(245,166,35,.15);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--gl),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:8px;}
+.nav-btn{background:none;border:none;color:var(--mut);font-family:'Cairo',sans-serif;font-size:14px;cursor:pointer;padding:8px 16px;border-radius:8px;transition:.2s;}
+.nav-btn:hover,.nav-btn.active{color:#fff;background:rgba(255,255,255,.06);}
+.admin-btn{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:var(--gold)!important;}
+
+/* PAGES */
+.page{display:none;position:relative;z-index:1;padding:40px 20px;max-width:1100px;margin:0 auto;}
+.page.active{display:block;}
+
+/* HERO */
+.hero{text-align:center;padding:80px 20px 60px;}
+.hero h1{font-family:'Tajawal',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.2;margin-bottom:16px;}
+.hero h1 span{background:linear-gradient(135deg,var(--gl),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--mut);font-size:16px;max-width:500px;margin:0 auto 32px;line-height:1.8;}
+.btn{padding:13px 28px;border-radius:12px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;border:none;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gl));color:#000;}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(245,166,35,.4);}
+.btn-outline{background:rgba(255,255,255,.05);color:#fff;border:1px solid rgba(255,255,255,.15);}
+.btn-outline:hover{background:rgba(255,255,255,.1);}
+.btn-sm{padding:8px 16px;font-size:13px;}
+.btn-red{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.3);}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-top:32px;}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;transition:.3s;}
+.card:hover{transform:translateY(-4px);border-color:rgba(245,166,35,.3);}
+.card-img{width:100%;height:160px;background:linear-gradient(135deg,#0d2444,#1a3a6b);display:flex;align-items:center;justify-content:center;font-size:48px;}
+.card-body{padding:20px;}
+.card-title{font-family:'Tajawal',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;}
+.card-desc{color:var(--mut);font-size:13px;line-height:1.7;margin-bottom:12px;}
+.card-price{font-family:'Tajawal',sans-serif;font-size:22px;font-weight:900;color:var(--gold);margin-bottom:12px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.tag{background:rgba(245,166,35,.1);color:var(--gl);border:1px solid rgba(245,166,35,.2);padding:3px 10px;border-radius:20px;font-size:11px;}
+.card-actions{display:flex;gap:8px;}
+
+/* SECTION TITLE */
+.sec-title{font-family:'Tajawal',sans-serif;font-size:28px;font-weight:900;margin-bottom:8px;}
+.sec-sub{color:var(--mut);font-size:14px;margin-bottom:32px;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:200;background:rgba(5,13,26,.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.on{display:flex;}
+.modal{background:linear-gradient(145deg,#0d1f3c,#0a1628);border:1px solid rgba(245,166,35,.2);border-radius:24px;padding:32px;width:100%;max-width:480px;position:relative;}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--gl),var(--gold),transparent);border-radius:24px 24px 0 0;}
+.modal h2{font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px;background:linear-gradient(135deg,var(--gl),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.05);border:none;color:var(--mut);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;}
+.modal-close:hover{background:rgba(255,80,80,.2);color:#fff;}
+.fg{margin-bottom:14px;}
+label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px;font-weight:600;}
+input,textarea,select{width:100%;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:11px;color:#fff;font-family:'Cairo',sans-serif;font-size:14px;outline:none;transition:.3s;}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);background:rgba(245,166,35,.05);}
+textarea{resize:vertical;min-height:80px;}
+select option{background:#0d1f3c;}
+
+/* VERIFY */
+.verify-box{max-width:500px;margin:40px auto;background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:32px;text-align:center;}
+.verify-result{margin-top:20px;padding:16px;border-radius:12px;font-size:14px;line-height:1.7;}
+.verify-result.ok{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);color:var(--grn);}
+.verify-result.fail{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:var(--red);}
+
+/* ADMIN */
+.admin-login{max-width:400px;margin:80px auto;background:var(--card);border:1px solid rgba(245,166,35,.2);border-radius:20px;padding:32px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:32px;}
+.stat-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px;text-align:center;}
+.stat-num{font-family:'Tajawal',sans-serif;font-size:32px;font-weight:900;color:var(--gold);}
+.stat-lbl{color:var(--mut);font-size:12px;margin-top:4px;}
+.table-wrap{overflow-x:auto;margin-top:16px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:rgba(255,255,255,.04);padding:10px 12px;text-align:right;color:var(--mut);font-weight:600;border-bottom:1px solid rgba(255,255,255,.07);}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:hover td{background:rgba(255,255,255,.02);}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-green{background:rgba(0,230,118,.15);color:var(--grn);}
+.badge-red{background:rgba(255,68,68,.15);color:var(--red);}
+.badge-yellow{background:rgba(245,166,35,.15);color:var(--gold);}
+.admin-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.tab-btn{padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:none;color:var(--mut);font-family:'Cairo',sans-serif;cursor:pointer;transition:.2s;}
+.tab-btn.active{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.3);color:var(--gold);}
+.msg{padding:12px 16px;border-radius:10px;font-size:13px;margin-top:12px;}
+.msg.ok{background:rgba(0,230,118,.1);color:var(--grn);border:1px solid rgba(0,230,118,.2);}
+.msg.err{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2);}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<nav>
+  <div class="logo">⚡ HSSIQ</div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home')">الرئيسية</button>
+    <button class="nav-btn" onclick="showPage('portfolio')">أعمالي</button>
+    <button class="nav-btn" onclick="showPage('verify')">التحقق من الترخيص</button>
+    <button class="nav-btn admin-btn" onclick="showPage('admin')">⚙️ الإدارة</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero" style="position:relative;z-index:1;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);padding:6px 16px;border-radius:50px;font-size:12px;color:var(--gl);margin-bottom:20px;">
+      ⭐ مطور برمجيات محترف
+    </div>
+    <h1>أنمار الهيتي<br><span>HSSIQ</span></h1>
+    <p>أبني حلول برمجية متكاملة — مواقع دردشة، أنظمة إدارة، تطبيقات ويب احترافية</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="showPage('portfolio')">🚀 مشاهدة أعمالي</button>
+      <button class="btn btn-outline" onclick="showPage('verify')">🔑 التحقق من ترخيص</button>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 20px 60px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;">
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">💻</div>
+        <div style="font-family:'Tajawal',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;">تطوير ويب</div>
+        <div style="color:var(--mut);font-size:13px;">Node.js, React, Socket.io</div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🛡️</div>
+        <div style="font-family:'Tajawal',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;">تراخيص برمجية</div>
+        <div style="color:var(--mut);font-size:13px;">نظام تراخيص آمن ومتكامل</div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🗄️</div>
+        <div style="font-family:'Tajawal',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;">قواعد بيانات</div>
+        <div style="color:var(--mut);font-size:13px;">PostgreSQL, Supabase</div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">☁️</div>
+        <div style="font-family:'Tajawal',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;">نشر سحابي</div>
+        <div style="color:var(--mut);font-size:13px;">Railway, Render, Vercel</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div id="page-portfolio" class="page">
+  <div class="sec-title">🚀 أعمالي ومشاريعي</div>
+  <div class="sec-sub">اضغط على أي مشروع للطلب أو للمزيد من التفاصيل</div>
+  <div class="grid" id="products-grid">
+    <div style="color:var(--mut);padding:40px;text-align:center;grid-column:1/-1;">⏳ جاري التحميل...</div>
+  </div>
+</div>
+
+<!-- VERIFY -->
+<div id="page-verify" class="page">
+  <div style="max-width:500px;margin:0 auto;">
+    <div class="sec-title">🔑 التحقق من الترخيص</div>
+    <div class="sec-sub">أدخل مفتاح الترخيص للتحقق من صلاحيته</div>
+    <div class="verify-box">
+      <div style="font-size:48px;margin-bottom:16px;">🛡️</div>
+      <div class="fg">
+        <label>مفتاح الترخيص</label>
+        <input id="verify-key" type="text" placeholder="HSSIQ-XXXX-XXXX-XXXX" style="text-align:center;font-family:monospace;letter-spacing:2px;">
+      </div>
+      <button class="btn btn-gold" onclick="verifyLicense()" style="width:100%;justify-content:center;">✅ تحقق الآن</button>
+      <div id="verify-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div id="admin-login-box" class="admin-login">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:40px;margin-bottom:8px;">⚙️</div>
+      <div style="font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;">لوحة الإدارة</div>
+    </div>
+    <div class="fg">
+      <label>رمز الدخول</label>
+      <input id="admin-token-input" type="password" placeholder="أدخل رمز الدخول">
+    </div>
+    <button class="btn btn-gold" onclick="adminLogin()" style="width:100%;justify-content:center;margin-top:8px;">دخول</button>
+    <div id="login-msg"></div>
+  </div>
+
+  <div id="admin-panel" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <div class="sec-title">⚙️ لوحة الإدارة</div>
+      <button class="btn btn-outline btn-sm" onclick="adminLogout()">خروج</button>
+    </div>
+
+    <div class="stats-grid" id="admin-stats"></div>
+
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="adminTab('orders')">📦 الطلبات</button>
+      <button class="tab-btn" onclick="adminTab('licenses')">🔑 التراخيص</button>
+      <button class="tab-btn" onclick="adminTab('products')">🛍️ المنتجات</button>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="atab-orders">
+      <div class="table-wrap">
+        <table id="orders-table">
+          <thead><tr><th>#</th><th>المنتج</th><th>العميل</th><th>البريد</th><th>المبلغ</th><th>الحالة</th><th>الترخيص</th><th>إجراء</th></tr></thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LICENSES -->
+    <div id="atab-licenses" style="display:none;">
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="btn btn-gold btn-sm" onclick="showCreateLicense()">➕ إنشاء ترخيص</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>المفتاح</th><th>المنتج</th><th>العميل</th><th>التفعيلات</th><th>الانتهاء</th><th>الحالة</th><th>إجراء</th></tr></thead>
+          <tbody id="licenses-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div id="atab-products" style="display:none;">
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="btn btn-gold btn-sm" onclick="showAddProduct()">➕ إضافة منتج</button>
+      </div>
+      <div class="grid" id="admin-products-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-bg" id="order-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('order-modal')">✕</button>
+    <h2>🛒 طلب منتج</h2>
+    <input type="hidden" id="order-product-id">
+    <div class="fg"><label>اسمك الكامل</label><input id="order-name" placeholder="أنمار الهيتي"></div>
+    <div class="fg"><label>بريدك الإلكتروني</label><input id="order-email" type="email" placeholder="example@email.com"></div>
+    <div class="fg"><label>ملاحظات (اختياري)</label><textarea id="order-notes" placeholder="أي تفاصيل إضافية..."></textarea></div>
+    <button class="btn btn-gold" onclick="submitOrder()" style="width:100%;justify-content:center;">✅ إرسال الطلب</button>
+    <div id="order-msg"></div>
+  </div>
+</div>
+
+<!-- APPROVE MODAL -->
+<div class="modal-bg" id="approve-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('approve-modal')">✕</button>
+    <h2>✅ الموافقة على الطلب</h2>
+    <input type="hidden" id="approve-order-id">
+    <div class="fg"><label>مدة الترخيص (أيام) - 0 = بدون انتهاء</label><input id="approve-days" type="number" value="0" min="0"></div>
+    <div class="fg"><label>عدد الأجهزة المسموح بها</label><input id="approve-activations" type="number" value="1" min="1"></div>
+    <button class="btn btn-gold" onclick="approveOrder()" style="width:100%;justify-content:center;">🔑 إنشاء الترخيص</button>
+    <div id="approve-msg"></div>
+  </div>
+</div>
+
+<!-- CREATE LICENSE MODAL -->
+<div class="modal-bg" id="create-license-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('create-license-modal')">✕</button>
+    <h2>🔑 إنشاء ترخيص</h2>
+    <div class="fg"><label>اسم العميل</label><input id="cl-name" placeholder="اسم العميل"></div>
+    <div class="fg"><label>البريد الإلكتروني</label><input id="cl-email" type="email" placeholder="email@example.com"></div>
+    <div class="fg"><label>مدة الترخيص (أيام) - 0 = بدون انتهاء</label><input id="cl-days" type="number" value="0"></div>
+    <div class="fg"><label>عدد الأجهزة</label><input id="cl-activations" type="number" value="1" min="1"></div>
+    <button class="btn btn-gold" onclick="createLicense()" style="width:100%;justify-content:center;">✅ إنشاء</button>
+    <div id="cl-msg"></div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal-bg" id="add-product-modal">
+  <div class="modal" style="max-width:560px;">
+    <button class="modal-close" onclick="closeModal('add-product-modal')">✕</button>
+    <h2>🛍️ إضافة منتج</h2>
+    <div class="fg"><label>اسم المنتج</label><input id="ap-name" placeholder="اسم المنتج"></div>
+    <div class="fg"><label>الوصف</label><textarea id="ap-desc" placeholder="وصف المنتج..."></textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="fg"><label>السعر ($)</label><input id="ap-price" type="number" value="0" min="0"></div>
+      <div class="fg"><label>الفئة</label><select id="ap-cat"><option value="software">برنامج</option><option value="chat">دردشة</option><option value="system">نظام</option><option value="web">ويب</option></select></div>
+    </div>
+    <div class="fg"><label>رابط Demo (اختياري)</label><input id="ap-demo" placeholder="https://..."></div>
+    <div class="fg"><label>رابط GitHub (اختياري)</label><input id="ap-github" placeholder="https://github.com/..."></div>
+    <div class="fg"><label>المميزات (افصل بفاصلة)</label><input id="ap-features" placeholder="ميزة 1, ميزة 2, ميزة 3"></div>
+    <button class="btn btn-gold" onclick="addProduct()" style="width:100%;justify-content:center;">✅ إضافة</button>
+    <div id="ap-msg"></div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let adminToken = localStorage.getItem('hssiq_admin_token') || '';
+
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  event?.target?.classList.add('active');
+  if (p === 'portfolio') loadProducts();
+  if (p === 'admin') initAdmin();
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('on'); }
+function openModal(id) { document.getElementById(id).classList.add('on'); }
+
+// PRODUCTS
+async function loadProducts() {
+  const r = await fetch('/api/products').then(r => r.json());
+  const grid = document.getElementById('products-grid');
+  if (!r.products?.length) { grid.innerHTML = '<div style="color:var(--mut);text-align:center;grid-column:1/-1;padding:40px;">لا توجد منتجات حالياً</div>'; return; }
+  grid.innerHTML = r.products.map(p => `
+    <div class="card">
+      <div class="card-img">${getCategoryIcon(p.category)}</div>
+      <div class="card-body">
+        <div class="card-title">${p.name}</div>
+        <div class="card-desc">${p.description || ''}</div>
+        <div class="tags">${(p.features || []).map(f => `<span class="tag">${f}</span>`).join('')}</div>
+        <div class="card-price">$${parseFloat(p.price).toFixed(2)}</div>
+        <div class="card-actions">
+          <button class="btn btn-gold btn-sm" onclick="openOrderModal(${p.id}, '${p.name}')">🛒 طلب الآن</button>
+          ${p.demo_url ? `<a href="${p.demo_url}" target="_blank" class="btn btn-outline btn-sm">👁️ معاينة</a>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getCategoryIcon(cat) {
+  return {chat:'💬',software:'💻',system:'⚙️',web:'🌐'}[cat] || '📦';
+}
+
+function openOrderModal(id, name) {
+  document.getElementById('order-product-id').value = id;
+  document.querySelector('#order-modal h2').textContent = '🛒 طلب: ' + name;
+  document.getElementById('order-msg').innerHTML = '';
+  openModal('order-modal');
+}
+
+async function submitOrder() {
+  const pid = document.getElementById('order-product-id').value;
+  const name = document.getElementById('order-name').value.trim();
+  const email = document.getElementById('order-email').value.trim();
+  const notes = document.getElementById('order-notes').value.trim();
+  if (!name || !email) { document.getElementById('order-msg').innerHTML = '<div class="msg err">يرجى ملء جميع الحقول</div>'; return; }
+  const r = await fetch('/api/orders', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product_id:pid,customer_name:name,customer_email:email,notes})}).then(r=>r.json());
+  document.getElementById('order-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.msg}</div>`;
+  if (r.ok) { document.getElementById('order-name').value=''; document.getElementById('order-email').value=''; document.getElementById('order-notes').value=''; }
+}
+
+// VERIFY
+async function verifyLicense() {
+  const key = document.getElementById('verify-key').value.trim();
+  if (!key) return;
+  const r = await fetch('/api/license/verify', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({license_key:key})}).then(r=>r.json());
+  const div = document.getElementById('verify-result');
+  if (r.ok) {
+    div.className = 'verify-result ok';
+    div.innerHTML = `✅ ${r.msg}<br><br><b>المنتج:</b> ${r.license.product || 'غير محدد'}<br><b>العميل:</b> ${r.license.customer || 'غير محدد'}<br><b>الانتهاء:</b> ${r.license.expires ? new Date(r.license.expires).toLocaleDateString('ar') : 'بدون انتهاء'}`;
+  } else {
+    div.className = 'verify-result fail';
+    div.innerHTML = r.msg;
+  }
+}
+
+// ADMIN
+function adminLogin() {
+  const t = document.getElementById('admin-token-input').value;
+  adminToken = t;
+  localStorage.setItem('hssiq_admin_token', t);
+  initAdmin();
+}
+function adminLogout() {
+  adminToken = '';
+  localStorage.removeItem('hssiq_admin_token');
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-login-box').style.display = 'block';
+}
+async function initAdmin() {
+  const r = await fetch('/api/admin/stats', {headers:{'x-admin-token':adminToken}}).then(r=>r.json());
+  if (!r.ok) {
+    document.getElementById('admin-login-box').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('login-msg').innerHTML = '<div class="msg err">رمز الدخول غير صحيح</div>';
+    return;
+  }
+  document.getElementById('admin-login-box').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${r.stats.products}</div><div class="stat-lbl">المنتجات</div></div>
+    <div class="stat-card"><div class="stat-num">${r.stats.orders}</div><div class="stat-lbl">الطلبات</div></div>
+    <div class="stat-card"><div class="stat-num">${r.stats.active_licenses}</div><div class="stat-lbl">تراخيص نشطة</div></div>
+    <div class="stat-card"><div class="stat-num">$${r.stats.revenue.toFixed(0)}</div><div class="stat-lbl">الإيرادات</div></div>
+  `;
+  loadOrders(); loadLicenses(); loadAdminProducts();
+}
+function adminTab(tab) {
+  ['orders','licenses','products'].forEach(t => {
+    document.getElementById('atab-'+t).style.display = t===tab?'block':'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['orders','licenses','products'][i]===tab));
+}
+async function loadOrders() {
+  const r = await fetch('/api/admin/orders', {headers:{'x-admin-token':adminToken}}).then(r=>r.json());
+  document.getElementById('orders-tbody').innerHTML = (r.orders||[]).map(o => `
+    <tr>
+      <td>#${o.id}</td>
+      <td>${o.product_name||'-'}</td>
+      <td>${o.customer_name}</td>
+      <td>${o.customer_email}</td>
+      <td>$${parseFloat(o.amount||0).toFixed(2)}</td>
+      <td><span class="badge ${o.status==='completed'?'badge-green':o.status==='pending'?'badge-yellow':'badge-red'}">${o.status==='completed'?'مكتمل':o.status==='pending'?'معلق':'ملغي'}</span></td>
+      <td style="font-family:monospace;font-size:11px;">${o.license_key||'-'}</td>
+      <td>${o.status==='pending'?`<button class="btn btn-gold btn-sm" onclick="openApprove(${o.id})">✅ موافقة</button>`:''}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--mut);padding:20px;">لا توجد طلبات</td></tr>';
+}
+function openApprove(id) {
+  document.getElementById('approve-order-id').value = id;
+  document.getElementById('approve-msg').innerHTML = '';
+  openModal('approve-modal');
+}
+async function approveOrder() {
+  const id = document.getElementById('approve-order-id').value;
+  const days = document.getElementById('approve-days').value;
+  const acts = document.getElementById('approve-activations').value;
+  const r = await fetch('/api/admin/orders/approve', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({order_id:id,expires_days:parseInt(days),max_activations:parseInt(acts)})}).then(r=>r.json());
+  document.getElementById('approve-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ تم! المفتاح: '+r.license_key:r.msg}</div>`;
+  if (r.ok) { loadOrders(); loadLicenses(); initAdmin(); }
+}
+async function loadLicenses() {
+  const r = await fetch('/api/admin/licenses', {headers:{'x-admin-token':adminToken}}).then(r=>r.json());
+  document.getElementById('licenses-tbody').innerHTML = (r.licenses||[]).map(l => `
+    <tr>
+      <td style="font-family:monospace;font-size:11px;">${l.license_key}</td>
+      <td>${l.product_name||'-'}</td>
+      <td>${l.customer_name||'-'}</td>
+      <td>${l.activations}/${l.max_activations}</td>
+      <td>${l.expires_at?new Date(l.expires_at).toLocaleDateString('ar'):'∞'}</td>
+      <td><span class="badge ${l.status==='active'?'badge-green':'badge-red'}">${l.status==='active'?'نشط':'ملغي'}</span></td>
+      <td>${l.status==='active'?`<button class="btn btn-red btn-sm" onclick="revokeLicense('${l.license_key}')">🚫 إلغاء</button>`:''}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--mut);padding:20px;">لا توجد تراخيص</td></tr>';
+}
+async function revokeLicense(key) {
+  if (!confirm('تأكيد إلغاء الترخيص؟')) return;
+  await fetch('/api/admin/licenses/revoke', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({license_key:key})});
+  loadLicenses();
+}
+function showCreateLicense() { document.getElementById('cl-msg').innerHTML=''; openModal('create-license-modal'); }
+async function createLicense() {
+  const r = await fetch('/api/admin/licenses/create', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({customer_name:document.getElementById('cl-name').value,customer_email:document.getElementById('cl-email').value,expires_days:parseInt(document.getElementById('cl-days').value),max_activations:parseInt(document.getElementById('cl-activations').value)})}).then(r=>r.json());
+  document.getElementById('cl-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ المفتاح: '+r.license_key:r.msg}</div>`;
+  if (r.ok) { loadLicenses(); initAdmin(); }
+}
+async function loadAdminProducts() {
+  const r = await fetch('/api/products').then(r=>r.json());
+  document.getElementById('admin-products-grid').innerHTML = (r.products||[]).map(p => `
+    <div class="card">
+      <div class="card-img">${getCategoryIcon(p.category)}</div>
+      <div class="card-body">
+        <div class="card-title">${p.name}</div>
+        <div class="card-price">$${parseFloat(p.price).toFixed(2)}</div>
+        <div class="card-actions">
+          <button class="btn btn-red btn-sm" onclick="deleteProduct(${p.id})">🗑️ حذف</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function showAddProduct() { document.getElementById('ap-msg').innerHTML=''; openModal('add-product-modal'); }
+async function addProduct() {
+  const features = document.getElementById('ap-features').value.split(',').map(f=>f.trim()).filter(Boolean);
+  const r = await fetch('/api/admin/products/add', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({name:document.getElementById('ap-name').value,description:document.getElementById('ap-desc').value,price:parseFloat(document.getElementById('ap-price').value),category:document.getElementById('ap-cat').value,demo_url:document.getElementById('ap-demo').value,github_url:document.getElementById('ap-github').value,features})}).then(r=>r.json());
+  document.getElementById('ap-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ تمت الإضافة':r.msg}</div>`;
+  if (r.ok) { loadAdminProducts(); loadProducts(); }
+}
+async function deleteProduct(id) {
+  if (!confirm('حذف المنتج؟')) return;
+  await fetch('/api/admin/products/delete', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({id})});
+  loadAdminProducts(); loadProducts();
+}
+
+// Init
+if (adminToken) initAdmin();
+</script>
+</body>
+</html>
