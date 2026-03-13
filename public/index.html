@@ -56,7 +56,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(5,13,26,.9);backdrop-filte
 /* MODAL */
 .modal-bg{position:fixed;inset:0;z-index:200;background:rgba(5,13,26,.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
 .modal-bg.on{display:flex;}
-.modal{background:linear-gradient(145deg,#0d1f3c,#0a1628);border:1px solid rgba(245,166,35,.2);border-radius:24px;padding:32px;width:100%;max-width:480px;position:relative;}
+.modal{background:linear-gradient(145deg,#0d1f3c,#0a1628);border:1px solid rgba(245,166,35,.2);border-radius:24px;padding:32px;width:100%;max-width:480px;position:relative;max-height:90vh;overflow-y:auto;}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--gl),var(--gold),transparent);border-radius:24px 24px 0 0;}
 .modal h2{font-family:'Tajawal',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px;background:linear-gradient(135deg,var(--gl),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.05);border:none;color:var(--mut);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;}
@@ -289,11 +289,48 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="fg"><label>السعر ($)</label><input id="ap-price" type="number" value="0" min="0"></div>
       <div class="fg"><label>الفئة</label><select id="ap-cat"><option value="software">برنامج</option><option value="chat">دردشة</option><option value="system">نظام</option><option value="web">ويب</option></select></div>
     </div>
+    <div class="fg">
+      <label>صورة المنتج</label>
+      <input type="file" id="ap-img-file" accept="image/*" onchange="previewImg('ap-img-file','ap-img-preview')" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:white;width:100%;cursor:pointer;">
+      <div id="ap-img-preview" style="margin-top:8px;"></div>
+      <input id="ap-img-url" placeholder="أو أدخل رابط الصورة مباشرة https://..." style="margin-top:8px;">
+    </div>
     <div class="fg"><label>رابط Demo (اختياري)</label><input id="ap-demo" placeholder="https://..."></div>
     <div class="fg"><label>رابط GitHub (اختياري)</label><input id="ap-github" placeholder="https://github.com/..."></div>
     <div class="fg"><label>المميزات (افصل بفاصلة)</label><input id="ap-features" placeholder="ميزة 1, ميزة 2, ميزة 3"></div>
     <button class="btn btn-gold" onclick="addProduct()" style="width:100%;justify-content:center;">✅ إضافة</button>
     <div id="ap-msg"></div>
+  </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal-bg" id="edit-product-modal">
+  <div class="modal" style="max-width:560px;">
+    <button class="modal-close" onclick="closeModal('edit-product-modal')">✕</button>
+    <h2>✏️ تعديل منتج</h2>
+    <input type="hidden" id="ep-id">
+    <div class="fg"><label>اسم المنتج</label><input id="ep-name" placeholder="اسم المنتج"></div>
+    <div class="fg"><label>الوصف</label><textarea id="ep-desc" placeholder="وصف المنتج..."></textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="fg"><label>السعر ($)</label><input id="ep-price" type="number" min="0"></div>
+      <div class="fg"><label>الفئة</label><select id="ep-cat"><option value="software">برنامج</option><option value="chat">دردشة</option><option value="system">نظام</option><option value="web">ويب</option></select></div>
+    </div>
+    <div class="fg">
+      <label>صورة المنتج</label>
+      <div id="ep-img-current" style="margin-bottom:8px;"></div>
+      <input type="file" id="ep-img-file" accept="image/*" onchange="previewImg('ep-img-file','ep-img-preview')" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px;color:white;width:100%;cursor:pointer;">
+      <div id="ep-img-preview" style="margin-top:8px;"></div>
+      <input id="ep-img-url" placeholder="أو أدخل رابط الصورة https://..." style="margin-top:8px;">
+    </div>
+    <div class="fg"><label>رابط Demo (اختياري)</label><input id="ep-demo" placeholder="https://..."></div>
+    <div class="fg"><label>رابط GitHub (اختياري)</label><input id="ep-github" placeholder="https://github.com/..."></div>
+    <div class="fg"><label>المميزات (افصل بفاصلة)</label><input id="ep-features" placeholder="ميزة 1, ميزة 2, ميزة 3"></div>
+    <div class="fg" style="display:flex;align-items:center;gap:10px;">
+      <input type="checkbox" id="ep-active" style="width:auto;">
+      <label for="ep-active" style="margin:0;">منتج نشط (يظهر للعملاء)</label>
+    </div>
+    <button class="btn btn-gold" onclick="saveEditProduct()" style="width:100%;justify-content:center;">💾 حفظ التعديلات</button>
+    <div id="ep-msg"></div>
   </div>
 </div>
 
@@ -320,7 +357,7 @@ async function loadProducts() {
   if (!r.products?.length) { grid.innerHTML = '<div style="color:var(--mut);text-align:center;grid-column:1/-1;padding:40px;">لا توجد منتجات حالياً</div>'; return; }
   grid.innerHTML = r.products.map(p => `
     <div class="card">
-      <div class="card-img">${getCategoryIcon(p.category)}</div>
+      <div class="card-img">${p.image_url ? `<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${getCategoryIcon(p.category)}'">` : getCategoryIcon(p.category)}</div>
       <div class="card-body">
         <div class="card-title">${p.name}</div>
         <div class="card-desc">${p.description || ''}</div>
@@ -466,24 +503,119 @@ async function loadAdminProducts() {
   const r = await fetch('/api/products').then(r=>r.json());
   document.getElementById('admin-products-grid').innerHTML = (r.products||[]).map(p => `
     <div class="card">
-      <div class="card-img">${getCategoryIcon(p.category)}</div>
+      <div class="card-img">${p.image_url ? `<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.style.display='none';this.nextSibling.style.display='block'"><span style="display:none">${getCategoryIcon(p.category)}</span>` : getCategoryIcon(p.category)}</div>
       <div class="card-body">
         <div class="card-title">${p.name}</div>
         <div class="card-price">$${parseFloat(p.price).toFixed(2)}</div>
         <div class="card-actions">
+          <button class="btn btn-gold btn-sm" onclick="openEditProduct(${JSON.stringify(p).replace(/"/g,'&quot;')})">✏️ تعديل</button>
           <button class="btn btn-red btn-sm" onclick="deleteProduct(${p.id})">🗑️ حذف</button>
         </div>
       </div>
     </div>
   `).join('');
 }
-function showAddProduct() { document.getElementById('ap-msg').innerHTML=''; openModal('add-product-modal'); }
+
+// Image preview helper
+function previewImg(inputId, previewId) {
+  const file = document.getElementById(inputId).files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="max-width:100%;max-height:120px;border-radius:8px;margin-top:4px;">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Get image as base64 or url
+async function getImageData(fileInputId, urlInputId) {
+  const file = document.getElementById(fileInputId).files[0];
+  if (file) {
+    return await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+  return document.getElementById(urlInputId).value.trim() || null;
+}
+
+function showAddProduct() {
+  document.getElementById('ap-msg').innerHTML='';
+  document.getElementById('ap-name').value='';
+  document.getElementById('ap-desc').value='';
+  document.getElementById('ap-price').value='0';
+  document.getElementById('ap-demo').value='';
+  document.getElementById('ap-github').value='';
+  document.getElementById('ap-features').value='';
+  document.getElementById('ap-img-url').value='';
+  document.getElementById('ap-img-preview').innerHTML='';
+  document.getElementById('ap-img-file').value='';
+  openModal('add-product-modal');
+}
+
 async function addProduct() {
   const features = document.getElementById('ap-features').value.split(',').map(f=>f.trim()).filter(Boolean);
-  const r = await fetch('/api/admin/products/add', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({name:document.getElementById('ap-name').value,description:document.getElementById('ap-desc').value,price:parseFloat(document.getElementById('ap-price').value),category:document.getElementById('ap-cat').value,demo_url:document.getElementById('ap-demo').value,github_url:document.getElementById('ap-github').value,features})}).then(r=>r.json());
-  document.getElementById('ap-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ تمت الإضافة':r.msg}</div>`;
+  const image_url = await getImageData('ap-img-file','ap-img-url');
+  const btn = event.target; btn.disabled=true; btn.textContent='جارٍ الإضافة...';
+  const r = await fetch('/api/admin/products/add', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({
+    name:document.getElementById('ap-name').value,
+    description:document.getElementById('ap-desc').value,
+    price:parseFloat(document.getElementById('ap-price').value)||0,
+    category:document.getElementById('ap-cat').value,
+    image_url,
+    demo_url:document.getElementById('ap-demo').value,
+    github_url:document.getElementById('ap-github').value,
+    features
+  })}).then(r=>r.json());
+  btn.disabled=false; btn.textContent='✅ إضافة';
+  document.getElementById('ap-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ تمت الإضافة بنجاح':r.msg}</div>`;
   if (r.ok) { loadAdminProducts(); loadProducts(); }
 }
+
+function openEditProduct(p) {
+  document.getElementById('ep-id').value = p.id;
+  document.getElementById('ep-name').value = p.name || '';
+  document.getElementById('ep-desc').value = p.description || '';
+  document.getElementById('ep-price').value = p.price || 0;
+  document.getElementById('ep-cat').value = p.category || 'software';
+  document.getElementById('ep-demo').value = p.demo_url || '';
+  document.getElementById('ep-github').value = p.github_url || '';
+  document.getElementById('ep-features').value = (p.features||[]).join(', ');
+  document.getElementById('ep-active').checked = p.is_active !== false;
+  document.getElementById('ep-img-url').value = '';
+  document.getElementById('ep-img-file').value = '';
+  document.getElementById('ep-img-preview').innerHTML = '';
+  document.getElementById('ep-img-current').innerHTML = p.image_url
+    ? `<img src="${p.image_url}" style="max-width:100%;max-height:100px;border-radius:8px;"><br><small style="color:var(--mut);">الصورة الحالية</small>`
+    : '';
+  document.getElementById('ep-msg').innerHTML = '';
+  openModal('edit-product-modal');
+}
+
+async function saveEditProduct() {
+  const features = document.getElementById('ep-features').value.split(',').map(f=>f.trim()).filter(Boolean);
+  const newImg = await getImageData('ep-img-file','ep-img-url');
+  // Keep old image if no new one provided
+  const image_url = newImg || document.getElementById('ep-img-current').querySelector('img')?.src || null;
+  const btn = event.target; btn.disabled=true; btn.textContent='جارٍ الحفظ...';
+  const r = await fetch('/api/admin/products/edit', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({
+    id: parseInt(document.getElementById('ep-id').value),
+    name: document.getElementById('ep-name').value,
+    description: document.getElementById('ep-desc').value,
+    price: parseFloat(document.getElementById('ep-price').value)||0,
+    category: document.getElementById('ep-cat').value,
+    image_url,
+    demo_url: document.getElementById('ep-demo').value,
+    github_url: document.getElementById('ep-github').value,
+    features,
+    is_active: document.getElementById('ep-active').checked
+  })}).then(r=>r.json());
+  btn.disabled=false; btn.textContent='💾 حفظ التعديلات';
+  document.getElementById('ep-msg').innerHTML = `<div class="msg ${r.ok?'ok':'err'}">${r.ok?'✅ تم الحفظ بنجاح':r.msg}</div>`;
+  if (r.ok) { loadAdminProducts(); loadProducts(); }
+}
+
 async function deleteProduct(id) {
   if (!confirm('حذف المنتج؟')) return;
   await fetch('/api/admin/products/delete', {method:'POST',headers:{'Content-Type':'application/json','x-admin-token':adminToken},body:JSON.stringify({id})});
